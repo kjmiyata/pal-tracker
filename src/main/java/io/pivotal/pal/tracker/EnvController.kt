@@ -6,13 +6,16 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class EnvController(
-        @Value("\${cf.instance.index:NOT SET}")
+        @Value(value = "\${cf.instance.index:NOT SET}")
         private val port: String,
-        @Value("\${cf.instance.index:NOT SET}")
+
+        @Value(value = "\${cf.instance.index:NOT SET}")
         private val memoryLimit: String,
-        @Value("\${cf.instance.index:NOT SET}")
+
+        @Value(value = "\${cf.instance.index:NOT SET}")
         private val instanceIndex: String,
-        @Value("\${cf.instance.index:NOT SET}")
+
+        @Value(value = "\${cf.instance.index:NOT SET}")
         private val instanceAddress: String
 ) {
     var env: Map<String, String> = mapOf(
@@ -21,6 +24,5 @@ class EnvController(
             Pair("CF_INSTANCE_INDEX", instanceIndex),
             Pair("CF_INSTANCE_ADDR", instanceAddress)
     )
-        @GetMapping("/env") get
-
+        @GetMapping(value = ["/env"]) get
 }
