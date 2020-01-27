@@ -9,3 +9,5 @@ open class PalTrackerApplication
 fun main(args: Array<String>) {
     SpringApplication.run(PalTrackerApplication::class.java, *args)
 }
+
+// Test
