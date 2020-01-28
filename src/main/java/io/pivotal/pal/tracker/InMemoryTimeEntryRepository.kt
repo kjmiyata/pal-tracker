@@ -47,5 +47,4 @@ class InMemoryTimeEntryRepository : TimeEntryRepository {
     override fun delete(id: Long) {
         entries.remove(id)
     }
-
 }
