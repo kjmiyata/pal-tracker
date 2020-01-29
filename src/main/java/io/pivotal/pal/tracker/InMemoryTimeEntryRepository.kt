@@ -28,8 +28,7 @@ class InMemoryTimeEntryRepository : TimeEntryRepository {
         return if (entries[id] != null) {
             entries[id] = timeEntry
             entries[id]
-        }
-        else {
+        } else {
             null
         }
     }
@@ -37,7 +36,7 @@ class InMemoryTimeEntryRepository : TimeEntryRepository {
     override fun list(): List<TimeEntry> {
         val listOfThing = arrayListOf<TimeEntry>()
 
-        entries.forEach {(_, entry) ->
+        entries.forEach { (_, entry) ->
             listOfThing.add(entry)
         }
 

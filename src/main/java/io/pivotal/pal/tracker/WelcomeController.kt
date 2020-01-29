@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-open class WelcomeController (@Value(value = "\${welcome.message}") private var message: String) {
+class WelcomeController(@Value(value = "\${welcome.message}") private var message: String) {
 
     @GetMapping(path = ["/"])
     fun sayHello(): String = message
