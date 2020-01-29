@@ -15,6 +15,23 @@ class JdbcTimeEntryRepository(dataSource: DataSource) : TimeEntryRepository {
 
     private val jdbcTemplate: JdbcTemplate = JdbcTemplate(dataSource)
 
+    private val extractor = ResultSetExtractor { rs: ResultSet ->
+        if (rs.next())
+            mapper.mapRow(rs, 1)
+        else
+            null
+    }
+
+    private val mapper = RowMapper { rs: ResultSet, _: Int ->
+        TimeEntry(
+                rs.getLong("id"),
+                rs.getLong("project_id"),
+                rs.getLong("user_id"),
+                rs.getDate("date").toLocalDate(),
+                rs.getInt("hours")
+        )
+    }
+
     override fun create(timeEntry: TimeEntry): TimeEntry {
         val generatedKeyHolder: KeyHolder = GeneratedKeyHolder()
         jdbcTemplate.update({ connection: Connection ->
@@ -48,23 +65,11 @@ class JdbcTimeEntryRepository(dataSource: DataSource) : TimeEntryRepository {
                 Date.valueOf(timeEntry.date),
                 timeEntry.hours,
                 id)
+
         return find(id)
     }
 
     override fun delete(id: Long) {
         jdbcTemplate.update("DELETE FROM time_entries WHERE id = ?", id)
     }
-
-    private val mapper = RowMapper { rs: ResultSet, _: Int ->
-        TimeEntry(
-                rs.getLong("id"),
-                rs.getLong("project_id"),
-                rs.getLong("user_id"),
-                rs.getDate("date").toLocalDate(),
-                rs.getInt("hours")
-        )
-    }
-
-    private val extractor = ResultSetExtractor { rs: ResultSet -> if (rs.next()) mapper.mapRow(rs, 1) else null }
-
 }
