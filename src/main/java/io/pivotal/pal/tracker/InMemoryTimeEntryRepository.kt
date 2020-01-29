@@ -1,6 +1,6 @@
 package io.pivotal.pal.tracker
 
-class InMemoryTimeEntryRepository : TimeEntryRepository {
+open class InMemoryTimeEntryRepository : TimeEntryRepository {
 
     var counter = 1L
 
