@@ -11,23 +11,23 @@ function main() {
 
     echo "Creating service key, if necessary ..."
 
-    cf create-service-key $service_name $service_key > /dev/null
+    cf create-service-key "$service_name" "$service_key" > /dev/null
 
     echo "Retrieving target database parameters ..."
 
-    credentials=$(cf service-key $service_name $service_key | sed -ne '/{/,$p')
+    credentials=$(cf service-key "$service_name" "$service_key" | sed -ne '/{/,$p')
 
-    db_host=$(echo $credentials | jq -r '.hostname')
-    db_name=$(echo $credentials | jq -r '.name')
-    db_username=$(echo $credentials | jq -r '.username')
-    db_password=$(echo $credentials | jq -r '.password')
-    db_port=$(echo $credentials | jq -r '.port')
+    db_host=$(echo "$credentials" | jq -r '.hostname')
+    db_name=$(echo "$credentials" | jq -r '.name')
+    db_username=$(echo "$credentials" | jq -r '.username')
+    db_password=$(echo "$credentials" | jq -r '.password')
+    db_port=$(echo "$credentials" | jq -r '.port')
 
     test -n "$db_host" || exit 1
 
     echo "Opening ssh tunnel to $db_host:$db_port ..."
 
-    cf ssh -N -L 63306:$db_host:$db_port $app_name &
+    cf ssh -N -L 63306:"$db_host":"$db_port" "$app_name" &
     cf_ssh_pid=$!
 
     echo "Waiting for tunnel ..."
@@ -64,8 +64,8 @@ function wait_for_tunnel() {
 
     set +e
 
-    for x in {1..10}; do
-        $(nc -z localhost 63306)
+    for _ in {1..10}; do
+        nc -z localhost 63306
         nc_status=$?
         if [[ "$nc_status" == "0" ]]; then
             echo "Ssh tunnel success."
