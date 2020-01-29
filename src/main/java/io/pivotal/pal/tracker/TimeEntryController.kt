@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-class TimeEntryController(@Autowired var repository: TimeEntryRepository) {
+class TimeEntryController(var repository: TimeEntryRepository) {
 
     @PostMapping(value = ["/time-entries"])
     fun create(@RequestBody entry: TimeEntry): ResponseEntity<*> {
